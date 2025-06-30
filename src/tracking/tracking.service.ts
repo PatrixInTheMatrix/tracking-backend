@@ -9,4 +9,8 @@ export class TrackingService {
   async logEvent(payload: any): Promise<any> {
     return this.model.create(payload);
   }
+
+  async getAllEvents(): Promise<any[]> {
+    return this.model.find().sort({ timestamp: -1 }).exec(); // neueste zuerst
+  }
 }
