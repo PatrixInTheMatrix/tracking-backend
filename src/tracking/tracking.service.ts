@@ -6,24 +6,20 @@ import { Model } from 'mongoose';
 export class TrackingService {
   constructor(@InjectModel('TrackingEvent') private model: Model<any>) {}
 
-  // Neues Tracking-Event speichern
   async logEvent(payload: any): Promise<any> {
     return this.model.create(payload);
   }
 
-  // Events abrufen (mit optionalem Filter nach eventName)
   async getAllEvents(eventName?: string): Promise<any[]> {
     const filter = eventName ? { eventName } : {};
     return this.model.find(filter).sort({ timestamp: -1 }).exec();
   }
 
-  // Alle Events löschen
   async deleteAll(): Promise<any> {
     return this.model.deleteMany({});
   }
 
-  // Feature-Statistik ermitteln
-  async getEventCounts(): Promise<any[]> {
+  async getEventCounts(): Promise<{ _id: string; count: number }[]> {
     return this.model.aggregate([
       {
         $group: {
