@@ -16,7 +16,7 @@ export class TrackingController {
   constructor(
     private readonly trackingService: TrackingService,
     private readonly configService: ConfigService
-  ) { }
+  ) {}
 
   @Post()
   async logEvent(@Body() body: any) {
@@ -35,7 +35,12 @@ export class TrackingController {
 
   @Delete()
   async deleteAll(@Headers('x-admin-key') adminKey: string) {
+    const expectedKey = this.configService.get<string>('ADMIN_KEY');
+
+    if (!adminKey || adminKey !== expectedKey) {
+      throw new UnauthorizedException('Invalid admin key');
+    }
+
     return this.trackingService.deleteAll();
   }
-
 }

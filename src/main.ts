@@ -12,7 +12,7 @@ async function bootstrap() {
       'https://dev.diwidi.net',
       'http://localhost:4200',
     ],
-    methods: ['POST'],
+    methods: ['GET', 'POST', 'DELETE', 'OPTIONS'],
   });
 
   await app.listen(process.env.PORT || 3000);
