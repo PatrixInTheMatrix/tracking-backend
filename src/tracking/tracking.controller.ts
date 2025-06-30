@@ -9,6 +9,7 @@ import {
   UnauthorizedException
 } from '@nestjs/common';
 import { TrackingService } from './tracking.service';
+import { ConfigService } from '@nestjs/config';
 
 @Controller('tracking')
 export class TrackingController {
