@@ -12,5 +12,6 @@ import { TrackingController } from './tracking.controller';
   ],
   controllers: [TrackingController],
   providers: [TrackingService],
+  exports: [TrackingService], // optional: falls in anderen Modulen verwendet
 })
 export class TrackingModule {}
