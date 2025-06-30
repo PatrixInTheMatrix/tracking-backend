@@ -4,7 +4,7 @@ import { Model } from 'mongoose';
 
 @Injectable()
 export class TrackingService {
-  constructor(@InjectModel('TrackingEvent') private model: Model<any>) {}
+  constructor(@InjectModel('TrackingEvent') private model: Model<any>) { }
 
   async logEvent(payload: any): Promise<any> {
     return this.model.create(payload);
@@ -30,4 +30,24 @@ export class TrackingService {
       { $sort: { count: -1 } }
     ]);
   }
+
+  async getSessionPageCounts(): Promise<any[]> {
+    return this.model.aggregate([
+      { $match: { eventName: 'pageview' } },
+      {
+        $group: {
+          _id: '$sessionId',
+          pages: { $addToSet: '$data.page' }
+        }
+      },
+      {
+        $project: {
+          _id: 1,
+          pageCount: { $size: '$pages' }
+        }
+      },
+      { $sort: { pageCount: -1 } }
+    ]);
+  }
+
 }

@@ -16,7 +16,7 @@ export class TrackingController {
   constructor(
     private readonly trackingService: TrackingService,
     private readonly configService: ConfigService
-  ) {}
+  ) { }
 
   @Post()
   async logEvent(@Body() body: any) {
@@ -43,4 +43,10 @@ export class TrackingController {
 
     return this.trackingService.deleteAll();
   }
+
+  @Get('sessions')
+  async getSessionStats() {
+    return this.trackingService.getSessionPageCounts();
+  }
+
 }
