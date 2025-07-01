@@ -50,4 +50,41 @@ export class TrackingService {
     ]);
   }
 
+  async getTimelineGroupedBySession(period: 'day' | 'week' | 'month' | 'year') {
+  const dateFormatMap: Record<string, string> = {
+    day: '%Y-%m-%d',
+    week: '%Y-%U', // Kalenderwoche
+    month: '%Y-%m',
+    year: '%Y'
+  };
+
+  const format = dateFormatMap[period] || '%Y-%m-%d';
+
+  return this.model.aggregate([
+    {
+      $group: {
+        _id: {
+          sessionId: '$sessionId',
+          date: { $dateToString: { format, date: '$timestamp' } }
+        },
+        count: { $sum: 1 }
+      }
+    },
+    {
+      $group: {
+        _id: '$_id.date',
+        sessions: {
+          $push: {
+            sessionId: '$_id.sessionId',
+            count: '$count'
+          }
+        },
+        totalEvents: { $sum: '$count' }
+      }
+    },
+    { $sort: { _id: 1 } }
+  ]);
+}
+
+
 }

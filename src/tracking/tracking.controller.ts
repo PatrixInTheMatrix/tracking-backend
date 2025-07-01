@@ -49,4 +49,10 @@ export class TrackingController {
     return this.trackingService.getSessionPageCounts();
   }
 
+  @Get('timeline')
+  async getTimeline(@Query('period') period: string = 'day') {
+    return this.trackingService.getTimelineGroupedBySession(period as any);
+  }
+
+
 }
